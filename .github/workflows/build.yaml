@@ -28,11 +28,3 @@ jobs:
           npm ci
           npm run cdk synth
         working-directory: backend
-
-      # This job will fail if we don't provide token for accessing
-      - name: Build Infrastructure
-        run: |
-          npm ci
-          npm run cdk synth
-        working-directory: infrastructure
-

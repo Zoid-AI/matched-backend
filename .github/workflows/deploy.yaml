@@ -34,4 +34,4 @@ jobs:
           npm ci
           npm run deploy-database
           npm run deploy-api
-        working-directory: infrastructure
+        working-directory: backend

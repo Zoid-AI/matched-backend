@@ -1,6 +1,7 @@
 import { StageProps, Stage, Stack } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { ZoidApi } from "../lib/api";
+import { ZoidDataStore } from "../lib/datastore";
 
 
 export class DeployStage extends Stage {
@@ -10,8 +11,9 @@ export class DeployStage extends Stage {
 
         const dataStoreStack = new Stack(this, "DataStore");
 
+        const matchedDataStore = new ZoidDataStore(dataStoreStack, "MatchedDataStore");
         const apiStack = new Stack(this, "Api");
 
-        new ZoidApi(apiStack, "ApiGateway");
+        new ZoidApi(apiStack, "ApiGateway", matchedDataStore);
     }
 }

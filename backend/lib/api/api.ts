@@ -20,7 +20,7 @@ export const FUNCTION_RUNTIME = Runtime.PYTHON_3_7;
 export class ZoidApi extends Construct implements IZoidApi {
     readonly httpApi: IHttpApi;
 
-    constructor(scope: Construct, id: string, dataStore?: IZoidDataStore) {
+    constructor(scope: Construct, id: string, dataStore: IZoidDataStore) {
         super(scope, id);
 
         const httpApi = new HttpApi(this, "HttpApi", {
@@ -39,14 +39,18 @@ export class ZoidApi extends Construct implements IZoidApi {
 
         const layer = new PythonLayerVersion(this, "Layer", {
             entry: join(__dirname, "layer"),
-            compatibleRuntimes: [FUNCTION_RUNTIME]
+            compatibleRuntimes: [FUNCTION_RUNTIME],
+
         });
 
         const helloFunction = new PythonFunction(this, "HelloFunction", {
             entry: join(__dirname, "lambda"),
             index: "hello.py",
             runtime: FUNCTION_RUNTIME,
-            layers: [layer]
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
         });
         const helloIntegration = new HttpLambdaIntegration("HelloIntegration", helloFunction);
 

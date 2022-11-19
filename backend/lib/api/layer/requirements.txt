@@ -1,0 +1,5 @@
+# This layer is for lambda specific package that is not shared across all lambdas
+# Example: sklearn, numpy, panda
+pandas
+numpy
+scikit-learn

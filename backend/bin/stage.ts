@@ -14,6 +14,6 @@ export class DeployStage extends Stage {
         const matchedDataStore = new ZoidDataStore(dataStoreStack, "MatchedDataStore");
         const apiStack = new Stack(this, "Api");
 
-        new ZoidApi(apiStack, "ApiGateway", matchedDataStore);
+        new ZoidApi(apiStack, "Api", matchedDataStore);
     }
 }

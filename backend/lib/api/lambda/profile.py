@@ -2,9 +2,14 @@ import os
 import boto3
 import json
 def handler(event, context):
-    table_name=os.environ["TABLE_NAME"]
+    raw_query = event['rawQueryString']
+    query = []
+    for sub in raw_query.split('&'):
+        if '=' in sub:
+            query.append(map(str.strip, sub.split('=', 1)))
+    query_dict = dict(query)
 
-    event["body"] = json.loads(event["body"])
+    table_name=os.environ["TABLE_NAME"]
 
     dynamodb = boto3.resource('dynamodb')
 
@@ -12,7 +17,7 @@ def handler(event, context):
 
     response = table.get_item(
         Key={
-            'pk': '#USER_ID{}'.format(event['body']['id']),
+            'pk': '#USER_ID{}'.format(query_dict['id']),
             'sk': '#DATA'
         },
     )

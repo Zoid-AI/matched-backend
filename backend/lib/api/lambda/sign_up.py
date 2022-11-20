@@ -31,17 +31,13 @@ def handler(event, context):
         'id': user_id
     })
 
-    table.put_item(Item={
-        'pk': '#USER_ID{}'.format(user_id),
-        'sk': '#DATA',
-        'first_name': event['body']['first_name'],
-        'last_name': event['body']['last_name'],
-        'labels': event['body']['labels'],
-        'languages': event['body']['languages'],
-        'type': event['body']['account_type'],
-        'interests': event['body']['interests'],
-        'description': ''
-    })
+    del event['body']['password']
+    dictionary = {'pk': '#USER_ID{}'.format(user_id),
+                  'sk': '#DATA'}
+    for key in event['body']:
+        dictionary[key] = event['body'][key]
+
+    table.put_item(Item=dictionary)
 
     return {
         'statusCode': 201

@@ -167,7 +167,7 @@ export class ZoidApi extends Construct implements IZoidApi {
         const editProfileIntegration = new HttpLambdaIntegration("EditProfileIntegration", editProfileFunction);
 
         httpApi.addRoutes({
-            path: "/editProfile",
+            path: "/profile/edit",
             methods: [HttpMethod.PUT],
             integration: editProfileIntegration
         });
@@ -185,7 +185,7 @@ export class ZoidApi extends Construct implements IZoidApi {
         const acceptIntegration = new HttpLambdaIntegration("AcceptIntegration", acceptFunction);
 
         httpApi.addRoutes({
-            path: "/accept",
+            path: "/request/accept",
             methods: [HttpMethod.POST],
             integration: acceptIntegration
         });

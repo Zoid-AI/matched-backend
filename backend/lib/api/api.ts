@@ -30,6 +30,8 @@ export class ZoidApi extends Construct implements IZoidApi {
                     CorsHttpMethod.HEAD,
                     CorsHttpMethod.OPTIONS,
                     CorsHttpMethod.POST,
+                    CorsHttpMethod.PUT,
+                    CorsHttpMethod.DELETE
                 ],
                 allowOrigins: ['*'],
                 maxAge: Duration.days(10),
@@ -42,6 +44,24 @@ export class ZoidApi extends Construct implements IZoidApi {
             compatibleRuntimes: [FUNCTION_RUNTIME],
 
         });
+
+        const helloFunction = new PythonFunction(this, "HelloFunction", {
+            entry: join(__dirname, "lambda"),
+            index: "hello.py",
+            runtime: FUNCTION_RUNTIME,
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
+        });
+        dataStore.table.grantReadWriteData(helloFunction);
+        const helloIntegration = new HttpLambdaIntegration("HelloIntegration", helloFunction);
+
+        httpApi.addRoutes({
+            path: "/hello",
+            methods: [HttpMethod.GET],
+            integration: helloIntegration
+        })
 
         const profileFunction = new PythonFunction(this, "ProfileFunction", {
             entry: join(__dirname, "lambda"),

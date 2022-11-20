@@ -12,10 +12,24 @@ def handler(event, context):
 
     table = dynamodb.Table(table_name)
 
+    mentee_info = table.get_item(Key={
+        'pk': '#USER_ID{}'.format(event['body']['menteeId']),
+        'sk': '#DATA'
+    })
+
+    mentor_info = table.get_item(Key={
+        'pk': '#USER_ID{}'.format(event['body']['mentorId']),
+        'sk': '#DATA'
+    })
+
+
     table.put_item(
         Item={
             'pk': '#USER_ID{}'.format(event['body']['mentorId']),
             'sk': '#MENTEE_MATCHED{}'.format(event['body']['menteeId']),
+            'email': mentee_info['Item']['email'],
+            'first_name': mentee_info['Item']['first_name'],
+            'last_name': mentee_info['Item']['last_name'],
         }
     )
 
@@ -23,6 +37,9 @@ def handler(event, context):
         Item={
             'pk': '#USER_ID{}'.format(event['body']['menteeId']),
             'sk': '#MENTOR_MATCHED{}'.format(event['body']['mentorId']),
+            'email': mentor_info['Item']['email'],
+            'first_name': mentor_info['Item']['first_name'],
+            'last_name': mentor_info['Item']['last_name'],
         }
     )
 

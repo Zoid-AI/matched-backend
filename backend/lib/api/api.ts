@@ -116,6 +116,133 @@ export class ZoidApi extends Construct implements IZoidApi {
             methods: [HttpMethod.PUT],
             integration: signUpIntegration
         })
+
+        const searchFunction = new PythonFunction(this, "SearchFunction", {
+            entry: join(__dirname, "lambda"),
+            index: "search.py",
+            runtime: FUNCTION_RUNTIME,
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
+        });
+        dataStore.table.grantReadWriteData(searchFunction);
+        const searchIntegration = new HttpLambdaIntegration("SearchIntegration", searchFunction);
+
+        httpApi.addRoutes({
+            path: "/search",
+            methods: [HttpMethod.GET],
+            integration: searchIntegration
+        });
+
+
+        const requestFunction = new PythonFunction(this, "RequestFunction", {
+            entry: join(__dirname, "lambda"),
+            index: "request.py",
+            runtime: FUNCTION_RUNTIME,
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
+        });
+        dataStore.table.grantReadWriteData(requestFunction);
+        const requestIntegration = new HttpLambdaIntegration("RequestIntegration", requestFunction);
+
+        httpApi.addRoutes({
+            path: "/request",
+            methods: [HttpMethod.POST],
+            integration: requestIntegration
+        });
+
+        const editProfileFunction = new PythonFunction(this, "EditProfileFunction", {
+            entry: join(__dirname, "lambda"),
+            index: "editProfile.py",
+            runtime: FUNCTION_RUNTIME,
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
+        });
+        dataStore.table.grantReadWriteData(editProfileFunction);
+        const editProfileIntegration = new HttpLambdaIntegration("EditProfileIntegration", editProfileFunction);
+
+        httpApi.addRoutes({
+            path: "/editProfile",
+            methods: [HttpMethod.PUT],
+            integration: editProfileIntegration
+        });
+
+        const acceptFunction = new PythonFunction(this, "AcceptFunction", {
+            entry: join(__dirname, "lambda"),
+            index: "accept.py",
+            runtime: FUNCTION_RUNTIME,
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
+        });
+        dataStore.table.grantReadWriteData(acceptFunction);
+        const acceptIntegration = new HttpLambdaIntegration("AcceptIntegration", acceptFunction);
+
+        httpApi.addRoutes({
+            path: "/accept",
+            methods: [HttpMethod.POST],
+            integration: acceptIntegration
+        });
+
+        const refuseFunction = new PythonFunction(this, "RefuseFunction", {
+            entry: join(__dirname, "lambda"),
+            index: "refuse.py",
+            runtime: FUNCTION_RUNTIME,
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
+        });
+        dataStore.table.grantReadWriteData(refuseFunction);
+        const refuseIntegration = new HttpLambdaIntegration("RefuseIntegration", refuseFunction);
+
+        httpApi.addRoutes({
+            path: "/refuse",
+            methods: [HttpMethod.DELETE],
+            integration: refuseIntegration
+        });
+
+        const getMenteeFunction = new PythonFunction(this, "GetMenteeFunction", {
+            entry: join(__dirname, "lambda"),
+            index: "getMentee.py",
+            runtime: FUNCTION_RUNTIME,
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
+        });
+        dataStore.table.grantReadWriteData(getMenteeFunction);
+        const getMenteeIntegration = new HttpLambdaIntegration("GetMenteeIntegration", getMenteeFunction);
+
+        httpApi.addRoutes({
+            path: "/profile/getMentee",
+            methods: [HttpMethod.GET],
+            integration: getMenteeIntegration
+        });
+
+        const getMentorFunction = new PythonFunction(this, "GetMentorFunction", {
+            entry: join(__dirname, "lambda"),
+            index: "getMentor.py",
+            runtime: FUNCTION_RUNTIME,
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
+        });
+        dataStore.table.grantReadWriteData(getMentorFunction);
+        const getMentorIntegration = new HttpLambdaIntegration("GetMentorIntegration", getMentorFunction);
+
+        httpApi.addRoutes({
+            path: "/profile/getMentor",
+            methods: [HttpMethod.GET],
+            integration: getMentorIntegration
+        });
     }
 
 }

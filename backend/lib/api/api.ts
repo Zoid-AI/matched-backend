@@ -238,6 +238,25 @@ export class ZoidApi extends Construct implements IZoidApi {
             methods: [HttpMethod.GET],
             integration: getMentorIntegration
         });
+
+
+        const getRequestFunction = new PythonFunction(this, "GetRequestFunction", {
+            entry: join(__dirname, "lambda"),
+            index: "get_request.py",
+            runtime: FUNCTION_RUNTIME,
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
+        });
+        dataStore.table.grantReadWriteData(getRequestFunction);
+        const getRequestIntegration = new HttpLambdaIntegration("GetRequestIntegration", getRequestFunction);
+
+        httpApi.addRoutes({
+            path: "/request",
+            methods: [HttpMethod.GET],
+            integration: getRequestIntegration
+        });
     }
 
 }

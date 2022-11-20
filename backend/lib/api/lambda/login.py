@@ -17,9 +17,6 @@ def handler(event, context):
         },
     )
 
-    print(event['body']['email'])
-    print(response)
-
     if 'Item' not in response:
         return {
             'statusCode': 404
@@ -28,7 +25,9 @@ def handler(event, context):
     if response['Item']['password'] == event['body']['password']:
         return {
             'statusCode': 200,
-            'body': json.dumps(response['Item']['id'])
+            'body': json.dumps({
+                'id': response['Item']['id']
+            })
         }
 
     return {

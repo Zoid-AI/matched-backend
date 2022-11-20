@@ -6,8 +6,12 @@ from boto3.dynamodb.conditions import Key
 
 def handler(event, context):
     table_name = os.environ["TABLE_NAME"]
-
-    event["body"] = json.loads(event["body"])
+    raw_query = event['rawQueryString']
+    query = []
+    for sub in raw_query.split('&'):
+        if '=' in sub:
+            query.append(map(str.strip, sub.split('=', 1)))
+    query_dict = dict(query)
 
     dynamodb = boto3.resource('dynamodb')
 
@@ -15,7 +19,7 @@ def handler(event, context):
 
     response = table.query(
         IndexName="Label",
-        KeyConditionExpression=Key('labels').eq(event['body']['labels']),
+        KeyConditionExpression=Key('labels').eq(query_dict['labels']),
     )
 
     if 'Items' not in response:

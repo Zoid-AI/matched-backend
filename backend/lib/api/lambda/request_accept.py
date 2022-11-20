@@ -34,5 +34,5 @@ def handler(event, context):
     )
 
     return {
-        'statusCode': 204,
+        'statusCode': 201,
     }

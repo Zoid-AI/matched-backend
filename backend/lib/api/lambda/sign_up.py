@@ -40,5 +40,8 @@ def handler(event, context):
     table.put_item(Item=dictionary)
 
     return {
-        'statusCode': 201
+        'statusCode': 201,
+        'body': json.dumps({
+            'id': user_id
+        })
     }

@@ -59,7 +59,58 @@ export class ZoidApi extends Construct implements IZoidApi {
             path: "/hello",
             methods: [HttpMethod.GET],
             integration: helloIntegration
+        })
+
+        const profileFunction = new PythonFunction(this, "ProfileFunction", {
+            entry: join(__dirname, "lambda"),
+            index: "profile.py",
+            runtime: FUNCTION_RUNTIME,
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
         });
+        const profileIntegration = new HttpLambdaIntegration("ProfileIntegration", profileFunction);
+
+        httpApi.addRoutes({
+            path: "/profile",
+            methods: [HttpMethod.GET],
+            integration: profileIntegration
+        })
+
+        const loginFunction = new PythonFunction(this, "LoginFunction", {
+            entry: join(__dirname, "lambda"),
+            index: "login.py",
+            runtime: FUNCTION_RUNTIME,
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
+        });
+        const loginIntegration = new HttpLambdaIntegration("LoginIntegration", loginFunction);
+
+        httpApi.addRoutes({
+            path: "/login",
+            methods: [HttpMethod.PUT],
+            integration: loginIntegration
+        })
+
+        const signUpFunction = new PythonFunction(this, "SignUpFunction", {
+            entry: join(__dirname, "lambda"),
+            index: "sign_up.py",
+            runtime: FUNCTION_RUNTIME,
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
+        });
+        const signUpIntegration = new HttpLambdaIntegration("SignUpIntegration", signUpFunction);
+
+        httpApi.addRoutes({
+            path: "/signUp",
+            methods: [HttpMethod.PUT],
+            integration: signUpIntegration
+        })
     }
 
 }

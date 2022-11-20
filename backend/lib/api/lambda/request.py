@@ -6,25 +6,22 @@ import os
 def handler(event, context):
     table_name = os.environ["TABLE_NAME"]
 
-    event["body"] = json.loads(event["body"])
+    event['body'] = json.loads(event['body'])
+    print(event['body'])
+    print(event['body']['message'])
 
     dynamodb = boto3.resource('dynamodb')
 
     table = dynamodb.Table(table_name)
 
-    response = table.get_item(
-        Key={
-            'pk': '#USER_ID{}'.format(event['body']['id']),
-            'sk': '#DATA'
-        },
+    table.put_item(
+        Item={
+            'pk': '#USER_ID{}'.format(event['body']['mentorId']),
+            'sk': '#MATCH{}'.format(event['body']['menteeId']),
+            'match_message':  '{}'.format(event['body']['message'])
+        }
     )
 
-    if 'Item' not in response:
-        return {
-            'statusCode': 404,
-        }
-
     return {
-        'statusCode': 200,
-        "body": json.dumps(response['Item'])
+        'statusCode': 201,
     }

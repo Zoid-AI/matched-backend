@@ -96,7 +96,7 @@ export class ZoidApi extends Construct implements IZoidApi {
             integration: requestIntegration
         });
 
-        const editProfile = new PythonFunction(this, "EditProfileFunction", {
+        const editProfileFunction = new PythonFunction(this, "EditProfileFunction", {
             entry: join(__dirname, "lambda"),
             index: "editProfile.py",
             runtime: FUNCTION_RUNTIME,
@@ -105,12 +105,80 @@ export class ZoidApi extends Construct implements IZoidApi {
                 TABLE_NAME: dataStore.table.tableName
             }
         });
-        const editProfileIntegration = new HttpLambdaIntegration("EditProfileIntegration", requestFunction);
+        const editProfileIntegration = new HttpLambdaIntegration("EditProfileIntegration", editProfileFunction);
 
         httpApi.addRoutes({
-            path: "/editProfile?id", //Update this line
+            path: "/editProfile", //Update this line
+            methods: [HttpMethod.PUT],
+            integration: editProfileIntegration
+        });
+
+        const acceptFunction = new PythonFunction(this, "AcceptFunction", {
+            entry: join(__dirname, "lambda"),
+            index: "accept.py",
+            runtime: FUNCTION_RUNTIME,
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
+        });
+        const acceptIntegration = new HttpLambdaIntegration("AcceptIntegration", acceptFunction);
+
+        httpApi.addRoutes({
+            path: "/accept", //Update this line
             methods: [HttpMethod.POST],
-            integration: requestIntegration
+            integration: acceptIntegration
+        });
+
+        const refuseFunction = new PythonFunction(this, "RefuseFunction", {
+            entry: join(__dirname, "lambda"),
+            index: "refuse.py",
+            runtime: FUNCTION_RUNTIME,
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
+        });
+        const refuseIntegration = new HttpLambdaIntegration("RefuseIntegration", refuseFunction);
+
+        httpApi.addRoutes({
+            path: "/refuse", //Update this line
+            methods: [HttpMethod.DELETE],
+            integration: refuseIntegration
+        });
+
+        const getMenteeFunction = new PythonFunction(this, "GetMenteeFunction", {
+            entry: join(__dirname, "lambda"),
+            index: "getMentee.py",
+            runtime: FUNCTION_RUNTIME,
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
+        });
+        const getMenteeIntegration = new HttpLambdaIntegration("GetMenteeIntegration", getMenteeFunction);
+
+        httpApi.addRoutes({
+            path: "/profile/getMentee", //Update this line
+            methods: [HttpMethod.GET],
+            integration: getMenteeIntegration
+        });
+
+        const getMentorFunction = new PythonFunction(this, "GetMentorFunction", {
+            entry: join(__dirname, "lambda"),
+            index: "getMentor.py",
+            runtime: FUNCTION_RUNTIME,
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
+        });
+        const getMentorIntegration = new HttpLambdaIntegration("GetMentorIntegration", getMentorFunction);
+
+        httpApi.addRoutes({
+            path: "/profile/getMentor", //Update this line
+            methods: [HttpMethod.GET],
+            integration: getMentorIntegration
         });
     }
 

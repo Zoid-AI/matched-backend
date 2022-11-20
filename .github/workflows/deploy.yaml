@@ -1,0 +1,37 @@
+on:
+  release:
+    types: [created]
+
+name: Build and Deploy
+jobs:
+  deploy:
+    name: Deploy AWS Resources
+    runs-on: ubuntu-latest
+    environment:
+      name: Production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node and Caching
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          cache: "npm"
+          cache-dependency-path: |
+            backend/package-lock.json
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.PROD_AWS_SECRET_KEY }}
+          aws-region: us-east-2
+
+      - name: Deploy
+        run: |
+          npm ci
+          npm run deploy-database
+          npm run deploy-api
+        working-directory: backend

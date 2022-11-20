@@ -52,6 +52,7 @@ export class ZoidApi extends Construct implements IZoidApi {
                 TABLE_NAME: dataStore.table.tableName
             }
         });
+        dataStore.table.grantReadWriteData(helloFunction);
         const helloIntegration = new HttpLambdaIntegration("HelloIntegration", helloFunction);
 
         httpApi.addRoutes({

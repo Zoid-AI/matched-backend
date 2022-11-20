@@ -25,6 +25,17 @@ export class ZoidDataStore extends Construct implements IZoidDataStore {
             billingMode: ddb.BillingMode.PAY_PER_REQUEST,
             encryption: ddb.TableEncryption.AWS_MANAGED,
         });
+        table.addGlobalSecondaryIndex({
+            indexName: "Label",
+            partitionKey: {
+                name: "labels",
+                type: ddb.AttributeType.STRING,
+            },
+            sortKey: {
+                name: "pk",
+                type: ddb.AttributeType.STRING,
+            }
+        })
         this.table = table;
     }
 

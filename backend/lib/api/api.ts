@@ -111,18 +111,6 @@ export class ZoidApi extends Construct implements IZoidApi {
         dataStore.table.grantReadWriteData(signUpFunction);
         const signUpIntegration = new HttpLambdaIntegration("SignUpIntegration", signUpFunction);
 
-        const getMenteeFunction = new PythonFunction(this, "SignUpFunction", {
-            entry: join(__dirname, "lambda"),
-            index: "sign_up.py",
-            runtime: FUNCTION_RUNTIME,
-            layers: [layer],
-            environment: {
-                TABLE_NAME: dataStore.table.tableName
-            }
-        });
-        dataStore.table.grantReadWriteData(signUpFunction);
-        const signUpIntegration = new HttpLambdaIntegration("SignUpIntegration", signUpFunction);
-
         httpApi.addRoutes({
             path: "/signUp",
             methods: [HttpMethod.PUT],

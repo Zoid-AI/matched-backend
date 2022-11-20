@@ -27,6 +27,8 @@ def handler(event, context):
             'statusCode': 404,
         }
 
+    response['Item']['id'] = query_dict['id']
+
     return {
         'statusCode': 200,
         'body': json.dumps(response['Item'])

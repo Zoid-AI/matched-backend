@@ -1,6 +1,8 @@
 import boto3
 import json
 import os
+import time
+from boto3.dynamodb.conditions import Key
 
 
 def handler(event, context):
@@ -12,19 +14,17 @@ def handler(event, context):
 
     table = dynamodb.Table(table_name)
 
-    response = table.get_item(
-        Key={
-            'pk': '#USER_ID{}'.format(event['body']['id']),
-            'sk': '#DATA'
-        },
+    response = table.query(
+        IndexName="Label",
+        KeyConditionExpression=Key('labels').eq(event['body']['labels']),
     )
 
-    if 'Item' not in response:
+    if 'Items' not in response:
         return {
             'statusCode': 404,
         }
 
     return {
         'statusCode': 200,
-        "body": json.dumps(response['Item'])
+        "body": json.dumps(response['Items'])
     }

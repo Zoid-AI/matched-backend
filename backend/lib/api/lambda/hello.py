@@ -13,7 +13,7 @@ def handler(event, context):
             query.append(map(str.strip, sub.split('=', 1)))
     query_dict = dict(query)
     name = query_dict['name']
-    URL = 'https://newsapi.org/v2/everything?q=${name}&sortBy=popularity&apiKey=72a551cf0da246c7abde552db5f33b85'
+    URL = 'https://newsapi.org/v2/everything'
     PARAMS = {'q':name, 'sortBy': 'popularity', 'apiKey':'72a551cf0da246c7abde552db5f33b85'}
     response = requests.get(url = URL, params = PARAMS)
 

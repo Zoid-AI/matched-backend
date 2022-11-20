@@ -18,12 +18,6 @@ def handler(event, context):
         'sk': '#DATA'
     })
 
-    dictionary = {
-        'pk': '#USER_ID{}'.format(event['body']['mentorId']),
-        'sk': '#MATCH{}'.format(event['body']['menteeId']),
-        'match_message': '{}'.format(event['body']['message'])
-    }
-
     table.put_item(
         Item={
             'pk': '#USER_ID{}'.format(event['body']['mentorId']),

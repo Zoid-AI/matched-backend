@@ -1,3 +1,4 @@
+
 import boto3
 import json
 import os
@@ -7,16 +8,15 @@ from boto3.dynamodb.conditions import Key
 def handler(event, context):
     table_name = os.environ["TABLE_NAME"]
 
-    event["body"] = json.loads(event["body"])
+    event['body'] = json.loads(event['body'])
 
     dynamodb = boto3.resource('dynamodb')
 
     table = dynamodb.Table(table_name)
 
     response = table.query(
-        IndexName="Label",
-        KeyConditionExpression=Key('labels').eq(event['body']['labels']),
-    )
+        KeyConditionExpression=Key('pk').eq('#USER_ID{}'.format(event['body']['id'])) & Key('sk').begins_with(
+            '#MENTEE_MATCHED'))
 
     if 'Items' not in response:
         return {
@@ -24,6 +24,6 @@ def handler(event, context):
         }
 
     return {
-        'statusCode': 200,
+        'statusCode': 201,
         "body": json.dumps(response['Items'])
     }

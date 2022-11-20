@@ -111,7 +111,7 @@ export class ZoidApi extends Construct implements IZoidApi {
         const editProfileIntegration = new HttpLambdaIntegration("EditProfileIntegration", editProfileFunction);
 
         httpApi.addRoutes({
-            path: "/editProfile", //Update this line
+            path: "/editProfile",
             methods: [HttpMethod.PUT],
             integration: editProfileIntegration
         });
@@ -129,7 +129,7 @@ export class ZoidApi extends Construct implements IZoidApi {
         const acceptIntegration = new HttpLambdaIntegration("AcceptIntegration", acceptFunction);
 
         httpApi.addRoutes({
-            path: "/accept", //Update this line
+            path: "/accept",
             methods: [HttpMethod.POST],
             integration: acceptIntegration
         });
@@ -147,7 +147,7 @@ export class ZoidApi extends Construct implements IZoidApi {
         const refuseIntegration = new HttpLambdaIntegration("RefuseIntegration", refuseFunction);
 
         httpApi.addRoutes({
-            path: "/refuse", //Update this line
+            path: "/refuse",
             methods: [HttpMethod.DELETE],
             integration: refuseIntegration
         });
@@ -165,7 +165,7 @@ export class ZoidApi extends Construct implements IZoidApi {
         const getMenteeIntegration = new HttpLambdaIntegration("GetMenteeIntegration", getMenteeFunction);
 
         httpApi.addRoutes({
-            path: "/profile/getMentee", //Update this line
+            path: "/profile/getMentee",
             methods: [HttpMethod.GET],
             integration: getMenteeIntegration
         });
@@ -183,7 +183,7 @@ export class ZoidApi extends Construct implements IZoidApi {
         const getMentorIntegration = new HttpLambdaIntegration("GetMentorIntegration", getMentorFunction);
 
         httpApi.addRoutes({
-            path: "/profile/getMentor", //Update this line
+            path: "/profile/getMentor",
             methods: [HttpMethod.GET],
             integration: getMentorIntegration
         });

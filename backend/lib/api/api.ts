@@ -58,7 +58,24 @@ export class ZoidApi extends Construct implements IZoidApi {
             path: "/hello",
             methods: [HttpMethod.GET],
             integration: helloIntegration
+        })
+
+        const getProfile = new PythonFunction(this, "getProfile", {
+            entry: join(__dirname, "lambda"),
+            index: "profile.py",
+            runtime: FUNCTION_RUNTIME,
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
         });
+        const getProfileIntegration = new HttpLambdaIntegration("getProfile", getProfile);
+
+        httpApi.addRoutes({
+            path: "/profile",
+            methods: [HttpMethod.GET],
+            integration: getProfileIntegration
+        })
     }
 
 }

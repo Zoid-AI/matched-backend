@@ -39,7 +39,8 @@ def handler(event, context):
         'labels': event['body']['labels'],
         'languages': event['body']['languages'],
         'type': event['body']['account_type'],
-        'interests': event['body']['interests']
+        'interests': event['body']['interests'],
+        'description': ''
     })
 
     return {

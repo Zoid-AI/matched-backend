@@ -59,6 +59,58 @@ export class ZoidApi extends Construct implements IZoidApi {
             methods: [HttpMethod.GET],
             integration: helloIntegration
         });
+
+        const searchFunction = new PythonFunction(this, "SearchFunction", {
+            entry: join(__dirname, "lambda"),
+            index: "search.py",
+            runtime: FUNCTION_RUNTIME,
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
+        });
+        const searchIntegration = new HttpLambdaIntegration("SearchIntegration", searchFunction);
+
+        httpApi.addRoutes({
+            path: "/search",
+            methods: [HttpMethod.GET],
+            integration: searchIntegration
+        });
+
+
+        const requestFunction = new PythonFunction(this, "RequestFunction", {
+            entry: join(__dirname, "lambda"),
+            index: "request.py",
+            runtime: FUNCTION_RUNTIME,
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
+        });
+        const requestIntegration = new HttpLambdaIntegration("RequestIntegration", requestFunction);
+
+        httpApi.addRoutes({
+            path: "/request",
+            methods: [HttpMethod.POST],
+            integration: requestIntegration
+        });
+
+        const editProfile = new PythonFunction(this, "EditProfileFunction", {
+            entry: join(__dirname, "lambda"),
+            index: "editProfile.py",
+            runtime: FUNCTION_RUNTIME,
+            layers: [layer],
+            environment: {
+                TABLE_NAME: dataStore.table.tableName
+            }
+        });
+        const editProfileIntegration = new HttpLambdaIntegration("EditProfileIntegration", requestFunction);
+
+        httpApi.addRoutes({
+            path: "/editProfile?id",
+            methods: [HttpMethod.POST],
+            integration: requestIntegration
+        });
     }
 
 }

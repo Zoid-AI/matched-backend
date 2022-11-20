@@ -17,10 +17,19 @@ def handler(event, context):
 
     table = dynamodb.Table(table_name)
 
+    if('%20') in query_dict['labels']:
+        query_dict['labels'] = 'Computer Science'
+
     response = table.query(
         IndexName="Label",
         KeyConditionExpression=Key('labels').eq(query_dict['labels']),
     )
+
+
+    for element in response['Items']:
+        temp = element['pk']
+        element['id'] = temp.replace('#USER_ID', '')
+
 
     if 'Items' not in response:
         return {

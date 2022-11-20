@@ -14,7 +14,7 @@ def handler(event, context):
 
     table = dynamodb.Table(table_name)
 
-    required = ['first_name', 'password', 'last_name', 'email', 'languages', 'account_type', 'label']
+    required = ['first_name', 'password', 'last_name', 'email', 'languages', 'account_type', 'labels']
 
     for key in required:
         if key not in event["body"]:

@@ -43,24 +43,6 @@ export class ZoidApi extends Construct implements IZoidApi {
 
         });
 
-        const helloFunction = new PythonFunction(this, "HelloFunction", {
-            entry: join(__dirname, "lambda"),
-            index: "hello.py",
-            runtime: FUNCTION_RUNTIME,
-            layers: [layer],
-            environment: {
-                TABLE_NAME: dataStore.table.tableName
-            }
-        });
-        dataStore.table.grantReadWriteData(helloFunction);
-        const helloIntegration = new HttpLambdaIntegration("HelloIntegration", helloFunction);
-
-        httpApi.addRoutes({
-            path: "/hello",
-            methods: [HttpMethod.GET],
-            integration: helloIntegration
-        })
-
         const profileFunction = new PythonFunction(this, "ProfileFunction", {
             entry: join(__dirname, "lambda"),
             index: "profile.py",
@@ -70,6 +52,7 @@ export class ZoidApi extends Construct implements IZoidApi {
                 TABLE_NAME: dataStore.table.tableName
             }
         });
+        dataStore.table.grantReadWriteData(profileFunction);
         const profileIntegration = new HttpLambdaIntegration("ProfileIntegration", profileFunction);
 
         httpApi.addRoutes({
@@ -87,6 +70,7 @@ export class ZoidApi extends Construct implements IZoidApi {
                 TABLE_NAME: dataStore.table.tableName
             }
         });
+        dataStore.table.grantReadWriteData(loginFunction);
         const loginIntegration = new HttpLambdaIntegration("LoginIntegration", loginFunction);
 
         httpApi.addRoutes({
@@ -104,6 +88,7 @@ export class ZoidApi extends Construct implements IZoidApi {
                 TABLE_NAME: dataStore.table.tableName
             }
         });
+        dataStore.table.grantReadWriteData(signUpFunction);
         const signUpIntegration = new HttpLambdaIntegration("SignUpIntegration", signUpFunction);
 
         httpApi.addRoutes({

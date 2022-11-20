@@ -26,12 +26,7 @@ export class ZoidApi extends Construct implements IZoidApi {
         const httpApi = new HttpApi(this, "HttpApi", {
             corsPreflight: {
                 allowMethods: [
-                    CorsHttpMethod.GET,
-                    CorsHttpMethod.HEAD,
-                    CorsHttpMethod.OPTIONS,
-                    CorsHttpMethod.POST,
-                    CorsHttpMethod.PUT,
-                    CorsHttpMethod.DELETE
+                    CorsHttpMethod.ANY,
                 ],
                 allowOrigins: ['*'],
                 maxAge: Duration.days(10),

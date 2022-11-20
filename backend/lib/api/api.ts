@@ -70,7 +70,7 @@ export class ZoidApi extends Construct implements IZoidApi {
                 TABLE_NAME: dataStore.table.tableName
             }
         });
-        dataStore.table.grantReadWriteData(profileFunction);
+        dataStore.table.grantReadWriteData(searchFunction);
         const searchIntegration = new HttpLambdaIntegration("SearchIntegration", searchFunction);
 
         httpApi.addRoutes({
@@ -89,7 +89,7 @@ export class ZoidApi extends Construct implements IZoidApi {
                 TABLE_NAME: dataStore.table.tableName
             }
         });
-        dataStore.table.grantReadWriteData(profileFunction);
+        dataStore.table.grantReadWriteData(requestFunction);
         const requestIntegration = new HttpLambdaIntegration("RequestIntegration", requestFunction);
 
         httpApi.addRoutes({
@@ -107,7 +107,7 @@ export class ZoidApi extends Construct implements IZoidApi {
                 TABLE_NAME: dataStore.table.tableName
             }
         });
-        dataStore.table.grantReadWriteData(profileFunction);
+        dataStore.table.grantReadWriteData(editProfileFunction);
         const editProfileIntegration = new HttpLambdaIntegration("EditProfileIntegration", editProfileFunction);
 
         httpApi.addRoutes({
@@ -125,7 +125,7 @@ export class ZoidApi extends Construct implements IZoidApi {
                 TABLE_NAME: dataStore.table.tableName
             }
         });
-        dataStore.table.grantReadWriteData(profileFunction);
+        dataStore.table.grantReadWriteData(acceptFunction);
         const acceptIntegration = new HttpLambdaIntegration("AcceptIntegration", acceptFunction);
 
         httpApi.addRoutes({
@@ -143,7 +143,7 @@ export class ZoidApi extends Construct implements IZoidApi {
                 TABLE_NAME: dataStore.table.tableName
             }
         });
-        dataStore.table.grantReadWriteData(profileFunction);
+        dataStore.table.grantReadWriteData(refuseFunction);
         const refuseIntegration = new HttpLambdaIntegration("RefuseIntegration", refuseFunction);
 
         httpApi.addRoutes({
@@ -161,7 +161,7 @@ export class ZoidApi extends Construct implements IZoidApi {
                 TABLE_NAME: dataStore.table.tableName
             }
         });
-        dataStore.table.grantReadWriteData(profileFunction);
+        dataStore.table.grantReadWriteData(getMenteeFunction);
         const getMenteeIntegration = new HttpLambdaIntegration("GetMenteeIntegration", getMenteeFunction);
 
         httpApi.addRoutes({
@@ -179,7 +179,7 @@ export class ZoidApi extends Construct implements IZoidApi {
                 TABLE_NAME: dataStore.table.tableName
             }
         });
-        dataStore.table.grantReadWriteData(profileFunction);
+        dataStore.table.grantReadWriteData(getMentorFunction);
         const getMentorIntegration = new HttpLambdaIntegration("GetMentorIntegration", getMentorFunction);
 
         httpApi.addRoutes({

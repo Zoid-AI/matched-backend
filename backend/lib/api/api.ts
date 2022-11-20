@@ -113,7 +113,7 @@ export class ZoidApi extends Construct implements IZoidApi {
 
         httpApi.addRoutes({
             path: "/signUp",
-            methods: [HttpMethod.PUT],
+            methods: [HttpMethod.POST],
             integration: signUpIntegration
         })
 
@@ -156,7 +156,7 @@ export class ZoidApi extends Construct implements IZoidApi {
 
         const editProfileFunction = new PythonFunction(this, "EditProfileFunction", {
             entry: join(__dirname, "lambda"),
-            index: "editProfile.py",
+            index: "profile_edit.py",
             runtime: FUNCTION_RUNTIME,
             layers: [layer],
             environment: {
@@ -174,7 +174,7 @@ export class ZoidApi extends Construct implements IZoidApi {
 
         const acceptFunction = new PythonFunction(this, "AcceptFunction", {
             entry: join(__dirname, "lambda"),
-            index: "accept.py",
+            index: "request_accept.py",
             runtime: FUNCTION_RUNTIME,
             layers: [layer],
             environment: {
@@ -192,7 +192,7 @@ export class ZoidApi extends Construct implements IZoidApi {
 
         const refuseFunction = new PythonFunction(this, "RefuseFunction", {
             entry: join(__dirname, "lambda"),
-            index: "refuse.py",
+            index: "request_refuse.py",
             runtime: FUNCTION_RUNTIME,
             layers: [layer],
             environment: {
@@ -203,14 +203,14 @@ export class ZoidApi extends Construct implements IZoidApi {
         const refuseIntegration = new HttpLambdaIntegration("RefuseIntegration", refuseFunction);
 
         httpApi.addRoutes({
-            path: "/refuse",
+            path: "/request/refuse",
             methods: [HttpMethod.DELETE],
             integration: refuseIntegration
         });
 
         const getMenteeFunction = new PythonFunction(this, "GetMenteeFunction", {
             entry: join(__dirname, "lambda"),
-            index: "getMentee.py",
+            index: "get_mentee.py",
             runtime: FUNCTION_RUNTIME,
             layers: [layer],
             environment: {
@@ -228,7 +228,7 @@ export class ZoidApi extends Construct implements IZoidApi {
 
         const getMentorFunction = new PythonFunction(this, "GetMentorFunction", {
             entry: join(__dirname, "lambda"),
-            index: "getMentor.py",
+            index: "get_mentor.py",
             runtime: FUNCTION_RUNTIME,
             layers: [layer],
             environment: {
